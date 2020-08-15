@@ -1,0 +1,119 @@
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+enum Role {
+    EMPLOYEE
+    MANAGER
+    ADMIN
+}
+
+model User {
+    id Int @id @default(autoincrement())
+    name String
+    email String @unique
+    role Role
+    hash String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Project {
+    id Int @id @default(autoincrement())
+    createdBy User @relation(fields: [createdById], references: [id])
+    createdById Int
+    positions ProjectPosition[]
+    allocations Allocation[]
+    name String
+    description String
+    startDate DateTime?
+    endDate DateTime?
+    draft Boolean
+    keywords String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model ProjectPosition {
+    id Int @id @default(autoincrement())
+    project Project @relation(fields: [projectId], references: [id])
+    projectId Int
+    skills PositionSkill[]
+    name String
+    description String
+    startDate DateTime?
+    endDate DateTime?
+    keywords String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model PositionSkill {
+    id Int @id @default(autoincrement())
+    position ProjectPosition @relation(fields: [positionId], references: [id])
+    positionId Int
+    name String
+    level Float
+    compulsory Boolean @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Employee {
+    id Int @id @default(autoincrement())
+    skills EmployeeSkill[]
+    experience EmployeeExperience[]
+    allocations Allocation[]
+    name String
+    email String @unique
+    preferences String
+    keywords String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Allocation {
+    id Int @id @default(autoincrement())
+    employee Employee @relation(fields: [employeeId], references: [id])
+    employeeId Int
+    project Project @relation(fields: [projectId], references: [id])
+    projectId Int
+    position String
+    startDate DateTime
+    endDate DateTime
+    capacity Float
+    draft Boolean
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model EmployeeSkill {
+    id Int @id @default(autoincrement())
+    employee Employee @relation(fields: [employeeId], references: [id])
+    employeeId Int
+    name String
+    level Float
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model EmployeeExperience {
+    id Int @id @default(autoincrement())
+    employee Employee @relation(fields: [employeeId], references: [id])
+    employeeId Int
+    name String
+    customer String
+    position String
+    description String
+    skills String[]
+    startDate DateTime
+    endDate DateTime
+    keywords String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

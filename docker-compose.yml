@@ -1,0 +1,20 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: staffing
+    ports:
+      - 5432:5432
+    container_name: staffing_postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@email.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - 5050:80
+    container_name: staffing_pgadmin

@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules/
+
+# Distribution directories
+dist/
+
+# Build directories
+build/
+
+# Prisma migration lock
+migrate.lock
+
+# QMiner DB directory
+qminer/

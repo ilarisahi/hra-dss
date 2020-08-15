@@ -1,0 +1,187 @@
+scalar DateScalar
+
+type Query {
+    skillLibrary: [String!]!
+    logout: Boolean!
+    authenticate: User!
+    project(
+        id: ID!
+    ): Project
+    projects: [Project!]!
+    employee(
+        id: ID!
+    ): Employee
+    employees: [Employee!]!
+    projectSearch(
+        projectId: ID!,
+        limit: Int!
+    ): [EmployeeSearchResponse!]!
+    projectSearchByPosition(
+        projectId: ID!,
+        limit: Int!
+    ): [PositionSearchResponse!]!
+}
+
+type Mutation {
+    login(
+        email: String!,
+        password: String!
+    ): User!
+    projectCreateUpdate(
+        id: ID,
+        name: String!,
+        description: String,
+        draft: Boolean!,
+        startDate: DateScalar,
+        endDate: DateScalar
+    ): Project!
+    projectDelete(
+        id: ID!
+    ): Project!
+    projectPositionCreateUpdate(
+        id: ID,
+        projectId: ID!,
+        name: String!,
+        description: String,
+        startDate: DateScalar,
+        endDate: DateScalar,
+        skills: [PositionSkillInput!]!
+    ): ProjectPosition!
+    projectPositionDelete(
+        id: ID!
+    ): ProjectPosition!
+    employeeCreateUpdate(
+        id: ID,
+        name: String!,
+        email: String!,
+        preferences: String,
+        skills: [EmployeeSkillInput!]!
+    ): Employee!
+    employeeDelete(
+        id: ID!
+    ): Employee!
+    employeeExperienceCreateUpdate(
+        id: ID,
+        employeeId: ID!,
+        name: String!,
+        customer: String,
+        position: String,
+        description: String,
+        skills: [String!]!,
+        startDate: DateScalar,
+        endDate: DateScalar
+    ): EmployeeExperience!
+    employeeExperienceDelete(
+        id: ID!
+    ): EmployeeExperience!
+    allocationCreateUpdate(
+        id: ID,
+        employeeId: ID!,
+        projectId: ID!,
+        position: String!,
+        capacity: Float!,
+        draft: Boolean!,
+        startDate: DateScalar!,
+        endDate: DateScalar!
+    ): Allocation!
+    allocationDelete(
+        id: ID!
+    ): Allocation!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    role: String!
+}
+
+type Project {
+    id: ID!
+    name: String!
+    description: String!
+    positions: [ProjectPosition!]!
+    allocations: [Allocation!]!
+    startDate: DateScalar
+    endDate: DateScalar
+    draft: Boolean!
+    createdAt: DateScalar!
+}
+
+type ProjectPosition {
+    id: ID!
+    name: String!
+    description: String
+    skills: [PositionSkill!]!
+    startDate: DateScalar
+    endDate: DateScalar
+}
+
+type PositionSkill {
+    id: ID!
+    name: String!
+    level: Float!
+    compulsory: Boolean!
+}
+
+input PositionSkillInput {
+    id: ID
+    name: String!
+    level: Float!
+    compulsory: Boolean!
+}
+
+type Employee {
+    id: ID!
+    name: String!
+    email: String!
+    preferences: String!
+    skills: [EmployeeSkill!]!
+    experience: [EmployeeExperience!]!
+    allocations: [Allocation!]!
+    createdAt: DateScalar!
+}
+
+type Allocation {
+    id: ID!
+    position: String!
+    capacity: Float!
+    project: Project!
+    employee: Employee!
+    startDate: DateScalar!
+    endDate: DateScalar!
+    draft: Boolean!
+}
+
+type EmployeeSkill {
+    id: ID!
+    name: String!
+    level: Float!
+}
+
+input EmployeeSkillInput {
+    id: ID
+    name: String!
+    level: Float!
+}
+
+type EmployeeExperience {
+    id: ID!
+    name: String!
+    customer: String
+    position: String
+    description: String
+    skills: [String!]!
+    startDate: DateScalar
+    endDate: DateScalar
+}
+
+type EmployeeSearchResponse {
+    score: Float!
+    employee: Employee!
+}
+
+type PositionSearchResponse {
+    position: ProjectPosition!
+    employees: [EmployeeSearchResponse!]!
+}

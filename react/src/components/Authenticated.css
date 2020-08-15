@@ -1,0 +1,23 @@
+.appbar-title {
+    flex-grow: 1;
+}
+
+.main-wrapper {
+    --drawer-width: 240px;
+}
+
+.nav-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+@media (min-width: 900px) {
+    .main-wrapper {
+        width: calc(100% - var(--drawer-width));
+        margin-left: var(--drawer-width);
+    }
+
+    .drawer, .drawer-paper {
+        width: var(--drawer-width);
+    }
+}
